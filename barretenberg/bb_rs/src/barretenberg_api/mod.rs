@@ -68,21 +68,6 @@ pub unsafe fn parse_c_str(ptr: *const ::std::os::raw::c_char) -> Option<String> 
 /// This function takes a byte slice and returns a `Vec<u8>` containing the length of the slice
 /// as a 4-byte big-endian integer, followed by the data of the slice itself.
 ///
-/// # Examples
-///
-/// ```
-/// use barretenberg::serialize_slice;
-///
-/// let data = &[1, 2, 3, 4, 5];
-/// let serialized = serialize_slice(data);
-/// assert_eq!(serialized, vec![0, 0, 0, 5, 1, 2, 3, 4, 5]);
-/// ```
-///
-/// # Panics
-///
-/// This function does not panic. However, if used improperly, the deserialization might not
-/// recover the original data if the resulting `Vec<u8>` is not interpreted correctly.
-///
 /// # Returns
 ///
 /// A `Vec<u8>` that contains a 4-byte big-endian representation of the length of the input slice,
