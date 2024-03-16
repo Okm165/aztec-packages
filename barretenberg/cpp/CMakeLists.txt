@@ -152,10 +152,6 @@ message(STATUS "HEADER_FILES: ${HEADER_FILES}")
 
 # Remove the prefix from each file path
 foreach(HEADER ${HEADER_FILES})
-    message(STATUS "HEADER: ${HEADER}")
-    message(STATUS "HEADER_RELATIVE_PATH: ${HEADER_RELATIVE_PATH}")
-    message(STATUS "DEST_DIR: ${DEST_DIR}")
-
     # Get the relative path of the header file to the src directory
     file(RELATIVE_PATH HEADER_RELATIVE_PATH ${CMAKE_SOURCE_DIR}/src ${HEADER})
     
