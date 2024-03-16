@@ -25,13 +25,17 @@ impl Buffer {
     /// pointing to at least `u32` bytes plus the length indicated by the u32 value.
     pub unsafe fn from_ptr(ptr: *const u8) -> Result<Self, BackendError> {
         if ptr.is_null() {
-            return Err(BackendError::BindingCallPointerError("Pointer is null.".to_string()));
+            return Err(BackendError::BindingCallPointerError(
+                "Pointer is null.".to_string(),
+            ));
         }
         let len_slice = slice::from_raw_parts(ptr, 4);
         let len = u32::from_be_bytes([len_slice[0], len_slice[1], len_slice[2], len_slice[3]]);
         let data_ptr = ptr.add(4);
         let data = slice::from_raw_parts(data_ptr, len as usize);
-        Ok(Self { data: data.to_vec() })
+        Ok(Self {
+            data: data.to_vec(),
+        })
     }
 
     /// Returns a reference to the buffer's data as a slice.
@@ -54,7 +58,9 @@ pub unsafe fn parse_c_str(ptr: *const ::std::os::raw::c_char) -> Option<String> 
     if ptr.is_null() {
         return None;
     }
-    CStr::from_ptr(ptr).to_str().map_or(None, |s| Some(s.to_string()))
+    CStr::from_ptr(ptr)
+        .to_str()
+        .map_or(None, |s| Some(s.to_string()))
 }
 
 /// Serializes a slice into a vector of bytes.

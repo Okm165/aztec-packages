@@ -26,7 +26,7 @@ fn main() {
     } else {
         println!("cargo:rustc-link-lib=stdc++");
     }
-    
+
     let bindings = bindgen::Builder::default()
         // Add the include path for headers.
         .clang_args([
