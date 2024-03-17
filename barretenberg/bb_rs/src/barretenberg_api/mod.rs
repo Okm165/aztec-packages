@@ -1,16 +1,18 @@
 use std::{ffi::CStr, slice};
 
+use self::traits::SerializeBuffer;
+
+pub mod models;
 pub mod pedersen;
+pub mod traits;
 
 // This matches bindgen::Builder output
 include!(concat!(env!("OUT_DIR"), "/bindings.rs"));
 
 #[derive(Debug, thiserror::Error)]
-pub enum BackendError {
+pub enum BufferError {
     #[error("Binding call error")]
-    BindingCallError(String),
-    #[error("Binding call output pointer error")]
-    BindingCallPointerError(String),
+    Null,
 }
 
 pub struct Buffer {
@@ -23,11 +25,9 @@ impl Buffer {
     /// # Safety
     /// This method is unsafe because it trusts the caller to ensure that `ptr` is a valid pointer
     /// pointing to at least `u32` bytes plus the length indicated by the u32 value.
-    pub unsafe fn from_ptr(ptr: *const u8) -> Result<Self, BackendError> {
+    pub unsafe fn from_ptr(ptr: *const u8) -> Result<Self, BufferError> {
         if ptr.is_null() {
-            return Err(BackendError::BindingCallPointerError(
-                "Pointer is null.".to_string(),
-            ));
+            return Err(BufferError::Null);
         }
         let len_slice = slice::from_raw_parts(ptr, 4);
         let len = u32::from_be_bytes([len_slice[0], len_slice[1], len_slice[2], len_slice[3]]);
@@ -63,18 +63,19 @@ pub unsafe fn parse_c_str(ptr: *const ::std::os::raw::c_char) -> Option<String> 
         .map_or(None, |s| Some(s.to_string()))
 }
 
-/// Serializes a slice into a vector of bytes.
-///
-/// This function takes a byte slice and returns a `Vec<u8>` containing the length of the slice
-/// as a 4-byte big-endian integer, followed by the data of the slice itself.
-///
-/// # Returns
-///
-/// A `Vec<u8>` that contains a 4-byte big-endian representation of the length of the input slice,
-/// followed by the data of the slice itself.
-pub fn serialize_slice(data: &[u8]) -> Vec<u8> {
-    let mut buffer = Vec::new();
-    buffer.extend_from_slice(&(data.len() as u32).to_be_bytes());
-    buffer.extend_from_slice(data);
-    buffer
+impl<T: SerializeBuffer> SerializeBuffer for &[T] {
+    fn to_buffer(&self) -> Vec<u8> {
+        let mut buffer = Vec::new();
+        buffer.extend_from_slice(&(self.len() as u32).to_be_bytes());
+        for elem in self.iter() {
+            buffer.extend_from_slice(&elem.to_buffer());
+        }
+        buffer
+    }
+}
+
+impl SerializeBuffer for u8 {
+    fn to_buffer(&self) -> Vec<u8> {
+        vec![*self]
+    }
 }
