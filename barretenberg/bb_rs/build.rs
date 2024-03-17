@@ -42,6 +42,7 @@ fn main() {
                 #include <barretenberg/crypto/pedersen_hash/c_bind.hpp>
                 #include <barretenberg/crypto/poseidon2/c_bind.hpp>
                 #include <barretenberg/crypto/blake2s/c_bind.hpp>
+                #include <barretenberg/crypto/schnorr/c_bind.hpp>
                 #include <barretenberg/srs/c_bind.hpp>
                 #include <barretenberg/examples/simple/c_bind.hpp>
                 #include <barretenberg/common/c_bind.hpp>
