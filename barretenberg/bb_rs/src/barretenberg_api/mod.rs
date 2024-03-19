@@ -2,8 +2,15 @@ use std::{ffi::CStr, slice};
 
 use self::traits::SerializeBuffer;
 
+pub mod acir;
+pub mod blake2s;
+pub mod common;
 pub mod models;
 pub mod pedersen;
+pub mod poseidon;
+pub mod schnorr;
+pub mod srs;
+
 pub mod traits;
 
 // This matches bindgen::Builder output

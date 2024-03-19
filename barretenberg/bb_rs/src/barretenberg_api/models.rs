@@ -1,4 +1,8 @@
+use std::ffi::c_void;
+
 use super::traits::{DeserializeBuffer, SerializeBuffer};
+
+pub type Ptr = *mut c_void;
 
 pub struct Fr {
     pub data: [u8; 32],
@@ -44,7 +48,7 @@ impl SerializeBuffer for Point {
         self.x
             .to_buffer()
             .into_iter()
-            .chain(self.y.to_buffer().into_iter())
+            .chain(self.y.to_buffer())
             .collect()
     }
 }
