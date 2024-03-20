@@ -1,7 +1,3 @@
-use std::{ffi::CStr, slice};
-
-use self::traits::SerializeBuffer;
-
 pub mod acir;
 pub mod blake2s;
 pub mod common;
@@ -10,11 +6,15 @@ pub mod pedersen;
 pub mod poseidon;
 pub mod schnorr;
 pub mod srs;
-
 pub mod traits;
 
-// This matches bindgen::Builder output
-include!(concat!(env!("OUT_DIR"), "/bindings.rs"));
+mod bindgen {
+    // This matches bindgen::Builder output
+    include!(concat!(env!("OUT_DIR"), "/bindings.rs"));
+}
+
+use self::traits::SerializeBuffer;
+use std::{ffi::CStr, slice};
 
 #[derive(Debug, thiserror::Error)]
 pub enum BufferError {

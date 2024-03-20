@@ -1,7 +1,7 @@
-use super::examples_simple_create_and_verify_proof;
+use super::bindgen;
 
-pub unsafe fn api_example_simple_create_and_verify_proof() -> bool {
+pub unsafe fn example_simple_create_and_verify_proof() -> bool {
     let mut result = false;
-    examples_simple_create_and_verify_proof(&mut result);
+    bindgen::examples_simple_create_and_verify_proof(&mut result);
     result
 }
