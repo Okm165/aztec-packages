@@ -4,5 +4,5 @@ pub trait SerializeBuffer {
 
 pub trait DeserializeBuffer {
     type Slice;
-    unsafe fn from_buffer(val: Self::Slice) -> Self;
+    fn from_buffer(val: Self::Slice) -> Self;
 }
