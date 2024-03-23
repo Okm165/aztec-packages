@@ -18,10 +18,10 @@ configure_file(
 
 option(DISABLE_ASM "Disable custom assembly" OFF)
 option(DISABLE_ADX "Disable ADX assembly variant" OFF)
-option(MULTITHREADING "Enable multi-threading" ON)
+option(MULTITHREADING "Enable multi-threading" OFF)
 option(OMP_MULTITHREADING "Enable OMP multi-threading" OFF)
 option(FUZZING "Build ONLY fuzzing harnesses" OFF)
-option(DISABLE_TBB "Intel Thread Building Blocks" ON)
+option(DISABLE_TBB "Intel Thread Building Blocks" OFF)
 option(COVERAGE "Enable collecting coverage from tests" OFF)
 option(ENABLE_ASAN "Address sanitizer for debugging tricky memory corruption" OFF)
 option(ENABLE_HEAVY_TESTS "Enable heavy tests when collecting coverage" OFF)
