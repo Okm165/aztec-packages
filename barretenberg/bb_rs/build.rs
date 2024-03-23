@@ -18,7 +18,7 @@ fn main() {
     println!("cargo:rustc-link-search={}/build/lib", dst.display());
 
     // Link the `barretenberg` static library.
-    println!("cargo:rustc-link-lib-static=barretenberg");
+    println!("cargo:rustc-link-lib=static=barretenberg");
 
     // Link the C++ standard library.
     if cfg!(target_os = "macos") || cfg!(target_os = "ios") {

@@ -8,6 +8,9 @@ pub mod schnorr;
 pub mod srs;
 pub mod traits;
 
+#[cfg(test)]
+pub mod tests;
+
 mod bindgen {
     // This matches bindgen::Builder output
     include!(concat!(env!("OUT_DIR"), "/bindings.rs"));
