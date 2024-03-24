@@ -1,7 +1,13 @@
 use super::{bindgen, models::Ptr, traits::SerializeBuffer, Buffer};
 use std::ptr;
 
-pub unsafe fn get_circuit_sizes(constraint_system_buf: &[u8]) -> (u32, u32, u32) {
+pub struct CircuitSizes {
+    pub exact: u32,
+    pub total: u32,
+    pub subgroup: u32,
+}
+
+pub unsafe fn get_circuit_sizes(constraint_system_buf: &[u8]) -> CircuitSizes {
     let mut exact = 0;
     let mut total = 0;
     let mut subgroup = 0;
@@ -11,7 +17,11 @@ pub unsafe fn get_circuit_sizes(constraint_system_buf: &[u8]) -> (u32, u32, u32)
         &mut total,
         &mut subgroup,
     );
-    (exact, total, subgroup)
+    CircuitSizes {
+        exact,
+        total,
+        subgroup,
+    }
 }
 
 pub unsafe fn new_acir_composer(size_hint: u32) -> Ptr {
