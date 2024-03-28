@@ -1,6 +1,7 @@
 use super::{bindgen, models::Ptr, traits::SerializeBuffer, Buffer};
 use std::ptr;
 
+#[derive(Debug)]
 pub struct CircuitSizes {
     pub exact: u32,
     pub total: u32,
@@ -18,9 +19,9 @@ pub unsafe fn get_circuit_sizes(constraint_system_buf: &[u8]) -> CircuitSizes {
         &mut subgroup,
     );
     CircuitSizes {
-        exact,
-        total,
-        subgroup,
+        exact: exact.to_be(),
+        total: total.to_be(),
+        subgroup: subgroup.to_be(),
     }
 }
 
@@ -71,11 +72,11 @@ pub unsafe fn acir_create_proof(
         witness_buf.to_buffer().as_slice().as_ptr(),
         &mut out_ptr,
     );
-    Buffer::from_ptr(out_ptr).unwrap().to_vec()
+    Buffer::from_ptr(Buffer::from_ptr(out_ptr).unwrap().to_vec().as_slice().as_ptr()).unwrap().to_vec()
 }
 
 pub unsafe fn acir_load_verification_key(acir_composer_ptr: &mut Ptr, vk_buf: &[u8]) {
-    bindgen::acir_load_verification_key(acir_composer_ptr, vk_buf.to_buffer().as_slice().as_ptr());
+    bindgen::acir_load_verification_key(acir_composer_ptr, vk_buf.as_ptr());
 }
 
 pub unsafe fn acir_init_verification_key(acir_composer_ptr: &mut Ptr) {
@@ -85,7 +86,7 @@ pub unsafe fn acir_init_verification_key(acir_composer_ptr: &mut Ptr) {
 pub unsafe fn acir_get_verification_key(acir_composer_ptr: &mut Ptr) -> Vec<u8> {
     let mut out_ptr = ptr::null_mut();
     bindgen::acir_get_verification_key(acir_composer_ptr, &mut out_ptr);
-    Buffer::from_ptr(out_ptr).unwrap().to_vec()
+    Buffer::from_ptr(Buffer::from_ptr(out_ptr).unwrap().to_vec().as_slice().as_ptr()).unwrap().to_vec()
 }
 
 pub unsafe fn acir_get_proving_key(acir_composer_ptr: &mut Ptr, acir_vec: &[u8]) -> Vec<u8> {
@@ -102,7 +103,7 @@ pub unsafe fn acir_verify_proof(acir_composer_ptr: &mut Ptr, proof_buf: &[u8]) -
     let mut result = false;
     bindgen::acir_verify_proof(
         acir_composer_ptr,
-        proof_buf.to_buffer().as_slice().as_ptr(),
+        proof_buf.to_buffer().as_ptr(),
         &mut result,
     );
     result
