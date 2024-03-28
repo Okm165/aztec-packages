@@ -72,7 +72,7 @@ pub unsafe fn acir_create_proof(
         witness_buf.to_buffer().as_slice().as_ptr(),
         &mut out_ptr,
     );
-    Buffer::from_ptr(Buffer::from_ptr(out_ptr).unwrap().to_vec().as_slice().as_ptr()).unwrap().to_vec()
+    Buffer::from_ptr(out_ptr).unwrap().to_vec()
 }
 
 pub unsafe fn acir_load_verification_key(acir_composer_ptr: &mut Ptr, vk_buf: &[u8]) {
