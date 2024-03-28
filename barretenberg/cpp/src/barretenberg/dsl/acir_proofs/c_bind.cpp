@@ -12,6 +12,7 @@
 #include "barretenberg/srs/global_crs.hpp"
 #include <cstdint>
 #include <memory>
+#include <stdio.h>
 
 WASM_EXPORT void acir_get_circuit_sizes(uint8_t const* acir_vec, uint32_t* exact, uint32_t* total, uint32_t* subgroup)
 {
@@ -97,7 +98,7 @@ WASM_EXPORT void acir_goblin_prove(in_ptr acir_composer_ptr,
 }
 
 WASM_EXPORT void acir_load_verification_key(in_ptr acir_composer_ptr, uint8_t const* vk_buf)
-{
+{   
     auto acir_composer = reinterpret_cast<acir_proofs::AcirComposer*>(*acir_composer_ptr);
     auto vk_data = from_buffer<plonk::verification_key_data>(vk_buf);
     acir_composer->load_verification_key(std::move(vk_data));
