@@ -14,13 +14,19 @@ using namespace bb;
  */
 WASM_EXPORT void srs_init_srs(uint8_t const* points_buf, uint32_t const* num_points_buf, uint8_t const* g2_point_buf)
 {
-    auto num_points = ntohl(*num_points_buf);
-    auto g1_points = std::vector<g1::affine_element>(num_points);
-    for (size_t i = 0; i < num_points; ++i) {
-        g1_points[i] = from_buffer<bb::g1::affine_element>(points_buf, i * 64);
-    }
-    auto g2_point = from_buffer<g2::affine_element>(g2_point_buf);
-    bb::srs::init_crs_factory(g1_points, g2_point);
+    // auto num_points = ntohl(*num_points_buf);
+    // auto g1_points = std::vector<g1::affine_element>(num_points);
+    // for (size_t i = 0; i < num_points; ++i) {
+    //     g1_points[i] = from_buffer<bb::g1::affine_element>(points_buf, i * 64);
+    // }
+    // auto g2_point = from_buffer<g2::affine_element>(g2_point_buf);
+
+    auto points = std::vector<g1::affine_element>(ntohl(*num_points_buf));
+    srs::IO<curve::BN254>::read_affine_elements_from_buffer(points.data(), (char*)points_buf, points.size() * 64);
+
+    g2::affine_element g2_point;
+    srs::IO<curve::BN254>::read_affine_elements_from_buffer(&g2_point, (char*)g2_point_buf, 128);
+    bb::srs::init_crs_factory(points, g2_point);
 }
 
 /**
