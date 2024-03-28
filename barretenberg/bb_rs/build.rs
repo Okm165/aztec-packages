@@ -9,9 +9,9 @@ fn main() {
     // Build the C++ code using CMake and get the build directory path.
     let dst = Config::new("../cpp")
         .profile("RelWithAssert")
-        .define("TARGET_ARCH", "x86-64")
+        .define("TARGET_ARCH", "skylake")
         .configure_arg("--toolchain=cmake/toolchains/x86_64-linux.cmake")
-        .build_target("barretenberg")
+        .build_target("bb")
         .build();
 
     // Add the library search path for Rust to find during linking.
