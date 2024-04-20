@@ -7,12 +7,21 @@ fn main() {
     println!("cargo:rerun-if-changed=build.rs");
 
     // Build the C++ code using CMake and get the build directory path.
-    let dst = Config::new("../cpp")
+    let dst = if cfg!(target_os = "macos") || cfg!(target_os = "ios") {
+        Config::new("../cpp")
+        .profile("RelWithAssert")
+        .define("TARGET_ARCH", "aarch64")
+        .configure_arg("--toolchain=cmake/toolchains/aarch64-darwin.cmake")
+        .build_target("bb")
+        .build()
+    } else {
+        Config::new("../cpp")
         .profile("RelWithAssert")
         .define("TARGET_ARCH", "skylake")
         .configure_arg("--toolchain=cmake/toolchains/x86_64-linux.cmake")
         .build_target("bb")
-        .build();
+        .build()
+    };
 
     // Add the library search path for Rust to find during linking.
     println!("cargo:rustc-link-search={}/build/lib", dst.display());
