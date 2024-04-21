@@ -144,8 +144,6 @@ if (ENABLE_ASAN AND NOT(FUZZING))
         message(AUTHOR_WARNING "Run `export ASAN_SYMBOLIZER_PATH=\"${LLVM_SYMBOLIZER_PATH}\"` before running tests for better ASAN output (at which lines the bugs are).")
     endif()
 endif()
-<<<<<<< HEAD
-=======
 
 # Get all the .h and .hpp files recursively from the src directory
 file(GLOB_RECURSE HEADER_FILES ./*.h ./*.hpp ./*tcc)
@@ -163,4 +161,3 @@ foreach(HEADER ${HEADER_FILES})
     # Copy the file, preserving its directory structure in the destination
     file(COPY ${HEADER} DESTINATION include/${DEST_DIR})
 endforeach()
->>>>>>> 4f446348b (type fix)
