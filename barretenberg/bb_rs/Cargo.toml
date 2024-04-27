@@ -1,6 +1,6 @@
 [package]
 name = "bb_rs"
-version.workspace = true
+version = "0.27.0"
 edition.workspace = true
 authors.workspace = true
 
